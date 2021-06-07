@@ -21,4 +21,4 @@ jobs:
       - run: npm ci
       - run: npm run test:ganache &
       - run: npm run test:start &
-      - run: npm test
+      - run: sleep 10 && npm test
