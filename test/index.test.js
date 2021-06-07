@@ -16,36 +16,29 @@ async function post(method, data) {
 describe('RPC', function () {
   describe('deploy', function () {
     it('empty contract', async function () {
-      try {
-        const res = await post('deploy', {
-          source: '//SPDX-License-Identifier: MIT\n pragma solidity ^0.8.1;\n',
-          compiler: '0.8.1',
-          contract: {
-            from: '0x2e8E6cBe91e4EFAb45Ebb21b9Aef64283F26833b',
-            name: 'Owner',
-            args: [],
-          }
-        });
-        assert.ok(res.error, 'should be error');
-      } catch (e) {
-        assert.fail(e.message);
-      }
+      this.timeout(10000);
+      const res = await post('deploy', {
+        source: '//SPDX-License-Identifier: MIT\n pragma solidity ^0.8.1;\n',
+        compiler: '0.8.1',
+        contract: {
+          from: '0x2e8E6cBe91e4EFAb45Ebb21b9Aef64283F26833b',
+          name: 'Owner',
+          args: [],
+        }
+      });
+      assert.ok(res.error, 'should be error');
     });
     it('bad source', async function () {
-      try {
-        const res = await post('deploy', {
-          source: '//SPDX-License-Identifier: MIT\n pragma solidity ^0.8.1;\n contract Owner{ address owner }',
-          compiler: '0.8.1',
-          contract: {
-            from: '0x2e8E6cBe91e4EFAb45Ebb21b9Aef64283F26833b',
-            name: 'Owner',
-            args: [],
-          }
-        });
-        assert.ok(res.error, 'should be error');
-      } catch (e) {
-        assert.fail(e.message);
-      }
+      const res = await post('deploy', {
+        source: '//SPDX-License-Identifier: MIT\n pragma solidity ^0.8.1;\n contract Owner{ address owner }',
+        compiler: '0.8.1',
+        contract: {
+          from: '0x2e8E6cBe91e4EFAb45Ebb21b9Aef64283F26833b',
+          name: 'Owner',
+          args: [],
+        }
+      });
+      assert.ok(res.error, 'should be error');
     });
     it('good source', async function () {
       const res = await post('deploy', {
