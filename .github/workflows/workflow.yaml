@@ -23,7 +23,7 @@ jobs:
       - run: npm run test:start &
       - run: sleep 10 && npm test
   build:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: test
     runs-on: ubuntu-latest
     steps:
