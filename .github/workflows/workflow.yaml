@@ -22,3 +22,14 @@ jobs:
       - run: npm run test:ganache &
       - run: npm run test:start &
       - run: sleep 10 && npm test
+  build:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get the version
+        id: vars
+        run: echo ::set-output name=sha::$(echo ${GITHUB_SHA:0:7})
+      - name: Run docker build
+        run: docker build -t vulcanize/testing-framework -f Dockerfile .
