@@ -36,6 +36,8 @@ jobs:
       - name: Tag docker image
         run: docker tag vulcanize/testing-framework docker.pkg.github.com/vulcanize/testing-framework/testing-framework:${{steps.vars.outputs.sha}}
       - name: Docker Login
+        if: ${{ github.repository == 'vulcanize/testing-framework' }}
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u vulcanize --password-stdin
       - name: Docker Push
+        if: ${{ github.repository == 'vulcanize/testing-framework' }}
         run: docker push docker.pkg.github.com/vulcanize/testing-framework/testing-framework:${{steps.vars.outputs.sha}}
