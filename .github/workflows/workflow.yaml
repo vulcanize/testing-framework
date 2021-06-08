@@ -33,3 +33,9 @@ jobs:
         run: echo ::set-output name=sha::$(echo ${GITHUB_SHA:0:7})
       - name: Run docker build
         run: docker build -t vulcanize/testing-framework -f Dockerfile .
+      - name: Tag docker image
+        run: docker tag vulcanize/testing-framework docker.pkg.github.com/vulcanize/testing-framework/testing-framework:${{steps.vars.outputs.sha}}
+      - name: Docker Login
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u vulcanize --password-stdin
+      - name: Docker Push
+        run: docker push docker.pkg.github.com/vulcanize/testing-framework/testing-framework:${{steps.vars.outputs.sha}}
