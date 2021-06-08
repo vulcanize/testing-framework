@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  release:
+    types: [ published ]
 
 jobs:
   test:
@@ -41,3 +43,23 @@ jobs:
       - name: Docker Push
         if: ${{ github.repository == 'vulcanize/testing-framework' }}
         run: docker push docker.pkg.github.com/vulcanize/testing-framework/testing-framework:${{steps.vars.outputs.sha}}
+  release:
+    if: ${{ github.repository == 'vulcanize/testing-framework' && github.event_name == 'release' && github.ref == 'refs/heads/published' }}
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the version
+        id: vars
+        run: |
+          echo ::set-output name=sha::$(echo ${GITHUB_SHA:0:7})
+          echo ::set-output name=tag::$(echo ${GITHUB_REF#refs/tags/})
+      - name: Docker Login to Github Registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u vulcanize --password-stdin
+      - name: Docker Pull
+        run: docker pull docker.pkg.github.com/vulcanize/testing-framework/testing-framework:${{steps.vars.outputs.sha}}
+      - name: Docker Login to Docker Registry
+        run: echo ${{ secrets.VULCANIZEJENKINS_PAT }} | docker login -u vulcanizejenkins --password-stdin
+      - name: Tag docker image
+        run: docker tag docker.pkg.github.com/vulcanize/testing-framework/testing-framework:${{steps.vars.outputs.sha}} vulcanize/testing-framework:${{steps.vars.outputs.tag}}
+      - name: Docker Push to Docker Hub
+        run: docker push vulcanize/testing-framework:${{steps.vars.outputs.tag}}
