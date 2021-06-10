@@ -27,6 +27,7 @@ describe('RPC', function () {
         }
       });
       assert.ok(res.error, 'should be error');
+      assert.ok(res.message, 'Contract "Owner" not found');
     });
     it('bad source', async function () {
       const res = await post('deploy', {
