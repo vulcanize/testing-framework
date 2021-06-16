@@ -1,0 +1,38 @@
+name: Test and build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 15.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run test:ganache &
+      - run: npm run test:start &
+      - run: sleep 10 && npm test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get the version
+        id: vars
+        run: echo ::set-output name=sha::$(echo ${GITHUB_SHA:0:7})
+      - name: Run docker build
+        run: docker build -t vulcanize/testing-framework -f Dockerfile .
+      - name: Tag docker image
+        run: docker tag vulcanize/testing-framework docker.pkg.github.com/vulcanize/testing-framework/testing-framework:${{steps.vars.outputs.sha}}
+      - name: Docker Login
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u vulcanize --password-stdin
+      - name: Docker Push
+        run: docker push docker.pkg.github.com/vulcanize/testing-framework/testing-framework:${{steps.vars.outputs.sha}}
