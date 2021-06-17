@@ -3,7 +3,7 @@ const assert = require('assert');
 const fetch = require('node-fetch');
 
 async function post(method, data) {
-  const res = await fetch(`http://localhost:3000/${method}`, {
+  const res = await fetch(`http://localhost:8889/${method}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

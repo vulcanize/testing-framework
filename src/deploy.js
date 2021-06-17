@@ -79,6 +79,7 @@ async function handler(req, reply) {
   reply.send({
     uuid: memory.save({ address: re.contractAddress, bytecode, abi }),
     address: re.contractAddress,
+    abi,
   });
 }
 

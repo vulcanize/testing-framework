@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "test": "npx mocha",
-    "test:start": "ACCOUNTS=\"0x321f89f3a648166df5af4dd2c808d91ba190b617ee181bc3e94ed1c08801b1ac,0x43332f8bd112b2ed44d97e791bb609ff6f0e04e984d6823360370b6c6285b213\" node index.js",
-    "test:ganache": "npx ganache-cli --account \"0x321f89f3a648166df5af4dd2c808d91ba190b617ee181bc3e94ed1c08801b1ac,1000000000000000000000\" --account \"0x43332f8bd112b2ed44d97e791bb609ff6f0e04e984d6823360370b6c6285b213,1000000000000000000000\""
+    "test:start": "PORT=8889 GETH=http://127.0.0.1:8888 ACCOUNTS=\"0x321f89f3a648166df5af4dd2c808d91ba190b617ee181bc3e94ed1c08801b1ac,0x43332f8bd112b2ed44d97e791bb609ff6f0e04e984d6823360370b6c6285b213\" node index.js",
+    "test:ganache": "npx ganache-cli -p 8888 --account \"0x321f89f3a648166df5af4dd2c808d91ba190b617ee181bc3e94ed1c08801b1ac,1000000000000000000000\" --account \"0x43332f8bd112b2ed44d97e791bb609ff6f0e04e984d6823360370b6c6285b213,1000000000000000000000\""
   },
   "repository": {
     "type": "git",

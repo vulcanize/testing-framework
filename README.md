@@ -2,6 +2,7 @@
 To start the application, you need to enter the command `npm start`
 
 __Environment variables__:
+- `HOST`     - network listening address 
 - `PORT`     - network listening port 
 - `GETH`     - address of geth rpc server 
 - `ACCOUNTS` - list of private keys separated by commas
